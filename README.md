@@ -9,7 +9,7 @@ out of getting started as airflow, spark, kafka, etc. can all take significant a
 ### prereqs:
 - VSCode with dev containers extension installed
 - Docker installed and configured with WSL
-- 
+  
 ### quick_start:
 - open in vscode
 - cd to .devcontainer
