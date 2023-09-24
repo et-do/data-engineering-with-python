@@ -6,10 +6,16 @@ necessary to run all the code and services in the book. This takes a lot of head
 out of getting started as airflow, spark, kafka, etc. can all take significant amount of setup time.
 
 
+### prereqs:
+- VSCode with dev containers extension installed
+- Docker installed and configured with WSL
+- 
 ### quick_start:
+- open in vscode
 - cd to .devcontainer
 - run docker-compose up
 - init airflow with: docker-compose run airflow-webserver airflow db init
+- click remote desktop >> "attach to running container" to open container in vscode window
 
 ### manage stack:
 - start stack with: docker-compose up -d
