@@ -1,0 +1,6 @@
+# Use the official Nifi image as a base
+FROM apache/nifi:latest
+
+# Download the PostgreSQL JDBC driver and put it in a 'drivers' directory in the Nifi installation directory
+RUN mkdir -p $NIFI_HOME/drivers && \
+    curl -L https://jdbc.postgresql.org/download/postgresql-42.2.20.jar -o $NIFI_HOME/drivers/postgresql.jar
