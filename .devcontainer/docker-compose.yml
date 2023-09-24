@@ -74,6 +74,9 @@ services:
     image: bitnami/spark:latest
     environment:
       - SPARK_MODE=master
+    ports:
+      - "8081:8080"  
+    command: /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
 
   redis:
     image: redis:latest
