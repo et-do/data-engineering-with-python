@@ -20,12 +20,27 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ../postgresql:/var/lib/postgresql
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL} # from .env
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # from .env
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     environment:
       discovery.type: single-node
+    ports:
+      - "9200:9200"
+    user: "elasticsearch"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.10.0
@@ -66,7 +81,7 @@ services:
       - "6379:6379"
 
   airflow-webserver:
-    image: apache/airflow:2.1.2-python3.8
+    image: apache/airflow:2.7.1-python3.9
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/mydatabase
@@ -77,13 +92,13 @@ services:
       - redis
       - airflow-scheduler
     volumes:
-      - ../dags:/opt/airflow/dags
+      - ../airflow:/opt/airflow
     ports:
       - "8080:8080"
     command: webserver
 
   airflow-scheduler:
-    image: apache/airflow:2.1.2-python3.8
+    image: apache/airflow:2.7.1-python3.9
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/mydatabase
@@ -93,12 +108,12 @@ services:
       - postgres
       - redis
     volumes:
-      - ../dags:/opt/airflow/dags
+      - ../airflow:/opt/airflow
     command: scheduler
 
 
   airflow-worker:
-    image: apache/airflow:2.1.2-python3.8
+    image: apache/airflow:2.7.1-python3.9
     command: celery worker
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
@@ -108,8 +123,9 @@ services:
     depends_on:
       - airflow-webserver
     volumes:
-      - ../dags:/opt/airflow/dags
+      - ../airflow:/opt/airflow
 
 volumes:
   postgres_data:
   dags_folder:
+  pgadmin_data:
