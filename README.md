@@ -29,4 +29,5 @@ For example, "airflow" is mounted to easily adjust the airflow.cfg file as well 
 
 ### manage stack:
 - start stack with: docker-compose up -d
+- enter container: docker exec -it [container_name] bash 
 - shutdown stack with: docker-compose down
