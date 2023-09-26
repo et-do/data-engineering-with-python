@@ -12,15 +12,17 @@ services:
       - elasticsearch
 
   postgres:
-    image: postgres:13
+    image: postgres:latest
+    restart: always
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
-      - ../postgresql:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
+
 
   pgadmin:
     image: dpage/pgadmin4
@@ -64,19 +66,21 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   nifi:
-    image: apache/nifi:latest
+    build: 
+      context: .
+      dockerfile: ./nifi/Dockerfile.nifi
     ports:
       - "8443:8443"
     environment:
       - NIFI_WEB_HTTP_PORT=8443
 
-  spark:
-    image: bitnami/spark:latest
-    environment:
-      - SPARK_MODE=master
-    ports:
-      - "8081:8080"  
-    command: /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
+  # spark:
+  #   image: bitnami/spark:latest
+  #   environment:
+  #     - SPARK_MODE=master
+  #   ports:
+  #     - "8081:8080"  
+  #   command: /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
 
   redis:
     image: redis:latest
@@ -84,12 +88,24 @@ services:
       - "6379:6379"
 
   airflow-webserver:
-    image: apache/airflow:2.7.1-python3.9
+    build: 
+      context: .
+      dockerfile: ./airflow/webserver/Dockerfile.airflow
+    entrypoint: ["/entrypoint.sh"]
+    mem_limit: 6g  # Allocate 2GB of memory
     environment:
+      - AIRFLOW__CORE__FERNET_KEY= ${AIRFLOW_FERNET_KEY}
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/mydatabase
-      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:5432/mydatabase
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/data_engineering_with_python
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/data_engineering_with_python
       - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
+      - AIRFLOW_USERNAME=${AIRFLOW_USERNAME}
+      - AIRFLOW_FIRSTNAME=${AIRFLOW_FIRSTNAME:-John}
+      - AIRFLOW_LASTNAME=${AIRFLOW_LASTNAME:-Doe}
+      - AIRFLOW_ROLE=${AIRFLOW_ROLE:-Admin}
+      - AIRFLOW_EMAIL=${AIRFLOW_EMAIL:-admin@example.com}
+      - AIRFLOW_PASSWORD=${AIRFLOW_PASSWORD:-admin}
+      - AIRFLOW__LOGGING__LOGGING_LEVEL=DEBUG
     depends_on:
       - postgres
       - redis
@@ -98,14 +114,13 @@ services:
       - ../airflow:/opt/airflow
     ports:
       - "8080:8080"
-    command: webserver
 
   airflow-scheduler:
     image: apache/airflow:2.7.1-python3.9
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/mydatabase
-      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:5432/mydatabase
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/data_engineering_with_python
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/data_engineering_with_python
       - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
     depends_on:
       - postgres
@@ -114,14 +129,15 @@ services:
       - ../airflow:/opt/airflow
     command: scheduler
 
-
   airflow-worker:
-    image: apache/airflow:2.7.1-python3.9
-    command: celery worker
+    build: 
+      context: .
+      dockerfile: ./airflow/worker/Dockerfile.airflow
+    entrypoint: ["/entrypoint.sh"]
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/mydatabase
-      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:5432/mydatabase
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/data_engineering_with_python
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/data_engineering_with_python
       - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
     depends_on:
       - airflow-webserver

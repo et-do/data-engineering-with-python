@@ -20,6 +20,14 @@ For example, "airflow" is mounted to easily adjust the airflow.cfg file as well 
 - create .env file in /.devcontainer with vars:
     - PGADMIN_DEFAULT_EMAIL
     - PGADMIN_DEFAULT_PASSWORD
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - AIRFLOW_USERNAME=user
+    - AIRFLOW_FIRSTNAME=ethan
+    - AIRFLOW_LASTNAME=d
+    - AIRFLOW_ROLE=admin
+    - AIRFLOW_EMAIL=ethan.domokos@gmail.com
+    - AIRFLOW_PASSWORD=password
 - open in vscode
 - cd to .devcontainer
 - run docker-compose up

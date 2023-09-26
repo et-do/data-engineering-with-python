@@ -1,0 +1,16 @@
+# Dockerfile.airflow-worker
+FROM apache/airflow:2.7.1-python3.9
+
+# Copy the requirements
+COPY ./airflow/worker/requirements.txt /requirements/
+
+RUN pip install -r /requirements/requirements.txt
+
+USER root
+
+COPY ./airflow/worker/entrypoint.sh /entrypoint.sh
+
+# Make the script executable
+RUN chmod +x /entrypoint.sh
+# Install additional packages
+USER airflow
