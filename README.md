@@ -40,6 +40,9 @@ Ensure you have:
 7. Use the "Attach to Running Container" feature in VSCode to work directly within a container.
 
 ## Managing Your Stack
+Feel free to edit any of the services with custom Dockerfiles and entrypoints.
+You'll find several in /.devcontainer under folders with the same service name.
+I.e. `/.devcontainer/airflow/worker/`
 
 Commands to manage your stack:
 - Launch your stack: `docker-compose up -d`
