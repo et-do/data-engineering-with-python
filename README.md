@@ -1,7 +1,7 @@
-This repo contains a docker-compose devcontainer environment to handle all 
+This repo contains docker-compose devcontainer environments to handle all 
 coding exercises in Data Engineering with Python by Paul Crickard.
 
-Running `docker-compose up`` will build & run all the containers and dependencies
+Running `docker-compose up` will build & run all the containers and dependencies
 necessary to run all the code and services in the book. This takes a lot of headache
 out of getting started as airflow, spark, kafka, etc. can all take significant amount of setup time.
 
@@ -20,14 +20,14 @@ For example, "airflow" is mounted to easily adjust the airflow.cfg file as well 
 - create .env file in /.devcontainer with vars:
     - PGADMIN_DEFAULT_EMAIL
     - PGADMIN_DEFAULT_PASSWORD
-    - POSTGRES_USER=user
-    - POSTGRES_PASSWORD=password
-    - AIRFLOW_USERNAME=user
-    - AIRFLOW_FIRSTNAME=ethan
-    - AIRFLOW_LASTNAME=d
-    - AIRFLOW_ROLE=admin
-    - AIRFLOW_EMAIL=ethan.domokos@gmail.com
-    - AIRFLOW_PASSWORD=password
+    - POSTGRES_USER
+    - POSTGRES_PASSWORD
+    - AIRFLOW_USERNAME
+    - AIRFLOW_FIRSTNAME
+    - AIRFLOW_LASTNAME
+    - AIRFLOW_ROLE
+    - AIRFLOW_EMAIL
+    - AIRFLOW_PASSWORD
 - open in vscode
 - cd to .devcontainer
 - run docker-compose up
