@@ -1,41 +1,49 @@
-This repo contains docker-compose devcontainer environments to handle all 
-coding exercises in Data Engineering with Python by Paul Crickard.
+# Devcontainer Environments for Data Engineering with Python
 
-Running `docker-compose up` will build & run all the containers and dependencies
-necessary to run all the code and services in the book. This takes a lot of headache
-out of getting started as airflow, spark, kafka, etc. can all take significant amount of setup time.
+This repository provides `docker-compose` devcontainer environments tailored for the coding exercises in "Data Engineering with Python" by Paul Crickard.
 
-The services all run in separate containers on the same network, and can be accessed in VSCode like a local
-machine using the remote desktop extensions, selecting "Attach to Running Container"
+## Benefits of this setup:
+- **Streamlined Setup**: Run `docker-compose up` to build & launch all the necessary containers and dependencies, eliminating the need for manual configuration.
+- **Unified Environment**: While each service runs in its separate container, they all operate within the same network, ensuring smooth interaction.
+- **Integrated with VSCode**: With the "Attach to Running Container" feature in the VSCode remote desktop extensions, working within a container is straightforward.
+- **Direct Access**: Directories like "airflow" are mounted to the main VSCode directory for ease of access to configurations and DAGs.
 
-Several containers have frequently used folders mounted to the main vscode directory for easy access. 
-For example, "airflow" is mounted to easily adjust the airflow.cfg file as well as have access to DAGs
+## Prerequisites
 
+Ensure you have:
+- VSCode with the dev containers extension.
+- Docker, configured with WSL.
 
-### prereqs:
-- VSCode with dev containers extension installed
-- Docker installed and configured with WSL
-  
-### quick_start:
-- create .env file in /.devcontainer with vars:
-    - PGADMIN_DEFAULT_EMAIL
-    - PGADMIN_DEFAULT_PASSWORD
-    - POSTGRES_USER
-    - POSTGRES_PASSWORD
-    - AIRFLOW_USERNAME
-    - AIRFLOW_FIRSTNAME
-    - AIRFLOW_LASTNAME
-    - AIRFLOW_ROLE
-    - AIRFLOW_EMAIL
-    - AIRFLOW_PASSWORD
-- open in vscode
-- cd to .devcontainer
-- run docker-compose up
-- init airflow with: docker-compose run airflow-webserver airflow db init
-- may need to go into postgres container and edit postgresql.conf to allow port listening
-- click remote desktop >> "attach to running container" to open container in vscode window
+## Quick Start
 
-### manage stack:
-- start stack with: docker-compose up -d
-- enter container: docker exec -it [container_name] bash 
-- shutdown stack with: docker-compose down
+1. Create a `.env` file in the `/.devcontainer` directory with the following variables:
+    ```plaintext
+    PGADMIN_DEFAULT_EMAIL
+    PGADMIN_DEFAULT_PASSWORD
+    POSTGRES_USER
+    POSTGRES_PASSWORD
+    AIRFLOW_USERNAME
+    AIRFLOW_FIRSTNAME
+    AIRFLOW_LASTNAME
+    AIRFLOW_ROLE
+    AIRFLOW_EMAIL
+    AIRFLOW_PASSWORD
+    ```
+2. Open the repository in VSCode.
+3. In your terminal, navigate to `.devcontainer`.
+4. Execute `docker-compose up`.
+5. Initialize Airflow: 
+   ```bash
+   docker-compose run airflow-webserver airflow db init
+   ```
+6. Adjustments in `postgresql.conf` may be necessary within the postgres container to enable port listening.
+7. Use the "Attach to Running Container" feature in VSCode to work directly within a container.
+
+## Managing Your Stack
+
+Commands to manage your stack:
+- Launch your stack: `docker-compose up -d`
+- Access a container: `docker exec -it [container_name] bash`
+- Shutdown your stack: `docker-compose down`
+
+Should you encounter issues or have suggestions, please contribute or open an issue.
