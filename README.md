@@ -18,35 +18,17 @@ Ensure you have:
 
 1. Create a `.env` file in the `/.devcontainer` directory with the following variables:
     ```plaintext
+    AIRFLOW_PROJ_DIR
     PGADMIN_DEFAULT_EMAIL
     PGADMIN_DEFAULT_PASSWORD
-    POSTGRES_USER
-    POSTGRES_PASSWORD
-    AIRFLOW_USERNAME
-    AIRFLOW_FIRSTNAME
-    AIRFLOW_LASTNAME
-    AIRFLOW_ROLE
-    AIRFLOW_EMAIL
-    AIRFLOW_PASSWORD
     ```
 2. Open the repository in VSCode.
 3. In your terminal, navigate to `.devcontainer`.
+4. Execute `docker-compose build`
 4. Execute `docker-compose up`.
-5. Initialize Airflow: 
-   ```bash
-   docker-compose run airflow-webserver airflow db init
-   ```
-6. Adjustments in `postgresql.conf` may be necessary within the postgres container to enable port listening.
-7. Use the "Attach to Running Container" feature in VSCode to work directly within a container.
-
-## Managing Your Stack
-Feel free to edit any of the services with custom Dockerfiles and entrypoints.
-You'll find several in /.devcontainer under folders with the same service name.
-I.e. `/.devcontainer/airflow/worker/`
-
-Commands to manage your stack:
-- Launch your stack: `docker-compose up -d`
-- Access a container: `docker exec -it [container_name] bash`
-- Shutdown your stack: `docker-compose down`
-
-Should you encounter issues or have suggestions, please contribute or open an issue.
+7. Open PgAdmin in a browser and register your postgres server
+- name = airflow
+- host name = postgres
+- port = 5432
+- username = airflow
+- password = airflow

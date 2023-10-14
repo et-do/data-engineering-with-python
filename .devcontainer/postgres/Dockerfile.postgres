@@ -1,9 +1,0 @@
-# Dockerfile.postgres
-FROM postgres:13
-
-# Copy prepare-init.sh into the image
-COPY ./postgres/prepare-init.sh /docker-entrypoint-initdb.d/00-prepare-init.sh
-USER root
-# Set executable permissions
-RUN chmod +x /docker-entrypoint-initdb.d/00-prepare-init.sh
-USER postgres
