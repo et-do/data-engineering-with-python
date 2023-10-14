@@ -25,10 +25,13 @@ Ensure you have:
 2. Open the repository in VSCode.
 3. In your terminal, navigate to `.devcontainer`.
 4. Execute `docker-compose build`
-4. Execute `docker-compose up`.
-7. Open PgAdmin in a browser and register your postgres server
+5. Execute `docker-compose up`.
+6. Open PgAdmin in a browser and register your postgres server
 - name = airflow
 - host name = postgres
 - port = 5432
+- username = airflow
+- password = airflow
+7. Open Airflow Webserver in a broswer and login
 - username = airflow
 - password = airflow
