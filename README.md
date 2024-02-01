@@ -1,6 +1,6 @@
 # Devcontainer Environments for Data Engineering with Python
 
-This repository provides `docker-compose` devcontainer environments tailored for the coding exercises in "Data Engineering with Python" by Paul Crickard.
+This repository provides `docker-compose` devcontainer environments tailored for the coding exercises in ["Data Engineering with Python" by Paul Crickard](https://github.com/Sourav692/Data-Engineer-Books/blob/main/4.%20Data%20Engineering%20with%20Python.pdf).
 
 ## Benefits of this setup:
 - **Streamlined Setup**: Run `docker-compose up` to build & launch all the necessary containers and dependencies, eliminating the need for manual configuration.
